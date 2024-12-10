@@ -23,6 +23,7 @@ var/
 # Virtual environments
 venv/
 .env/
+.env
 
 # VSCode
 .vscode/

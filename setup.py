@@ -19,6 +19,7 @@ setup(
     install_requires=[
         "langchain>=0.3.7", 
         "langchain-community>=0.3.5", 
-        "langchain-core>=0.3.20" 
+        "langchain-core>=0.3.20" ,
+        "chromadb>=0.5.20"
     ],
 )

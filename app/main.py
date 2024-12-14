@@ -26,7 +26,7 @@ retriever = create_vector_store_retriever(documents=documents ,embeddings_model=
 # Initialize the retrieval stratege
 r = DecomposeRetriever(model=retrieval_llm, base_retriever=retriever)
 
-# Initialize Genrator template
+# Initialize Genrator stratege
 g = IndividualGenerator(model=generation_llm, template=None)
 
 # Pipline

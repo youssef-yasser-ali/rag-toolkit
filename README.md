@@ -1,3 +1,5 @@
+# RAG Toolkit
+
 ### RAG Toolkit Overview
 
 The **RAG Toolkit** is a powerful library designed to integrate advanced retrieval-augmented generation (RAG) techniques into your machine learning pipeline. The toolkit facilitates document retrieval and response generation, enabling the creation of intelligent, AI-driven applications that can synthesize knowledge from a variety of documents based on user queries. This toolkit leverages state-of-the-art language models and retrieval strategies to improve the quality and relevance of generated responses.

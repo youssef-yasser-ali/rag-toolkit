@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, FewShotChatMessagePromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain.load import dumps, loads
 from langchain import hub
@@ -139,3 +139,50 @@ class DecomposeRetriever(BaseRetriever):
             Output (3 queries):"""
         )
         return ChatPromptTemplate.from_template(template)
+
+
+
+
+class StepBackRetriever(BaseRetriever):
+    def name(self) -> str:
+        return 'Step Back Retrieval'
+    
+    def generate_retrieval_prompt(self):
+        examples = [
+        {
+            "input": "Could the members of The Police perform lawful arrests?",
+            "output": "what can the members of The Police do?",
+        },
+        {
+            "input": "Jan Sindel’s was born in what country?",
+            "output": "what is Jan Sindel’s personal history?",
+        },
+        ]
+
+        example_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("human", "{input}"),
+            ("ai", "{output}"),
+        ]
+        )
+
+        few_shot_prompt = FewShotChatMessagePromptTemplate(
+            example_prompt=example_prompt,
+            examples=examples,
+        )
+        return ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",
+                    """You are an expert at world knowledge. Your task is to step back and paraphrase a question to a more generic step-back question, which is easier to answer. Here are a few examples:""",
+                ),
+                few_shot_prompt,
+                ("user", "{question}"),
+            ])
+    
+    def build_query_gen_chain(self):
+        return (
+            self.generate_retrieval_prompt()
+            | self.model
+            | StrOutputParser()
+        )

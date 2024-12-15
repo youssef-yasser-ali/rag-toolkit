@@ -134,6 +134,24 @@ class IndividualGenerator(BaseGenerator):
 
 
 
-        
+class StepBackGenerator(BaseGenerator):
+    def default_template(self):
+        return  """You are an expert of world knowledge. I am going to ask you a question. Your response should be comprehensive and not contradicted with the following context if they are relevant. Otherwise, ignore them if they are not relevant.
 
-        
+            # {normal_context}
+            # {step_back_context}
+
+            # Original Question: {question}
+            # Answer:"""
+
+    def build_chain(self, retrival_approch):
+        return {
+            "normal_context": itemgetter('question')| retrival_approch.base_retriever,
+            "question": itemgetter('question'),
+            "step_back_context": retrival_approch.build_query_gen_chain() | retrival_approch.base_retriever
+        } | self.prompt | self.model | StrOutputParser()
+
+    def answer(self, query, retrieval_approach):
+        chain = self.build_chain(retrival_approch=retrieval_approach)
+
+        return chain.invoke({"question": query})

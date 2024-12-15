@@ -27,6 +27,7 @@ class BaseGenerator(ABC):
             "context": context,
             "question": question
         } | self.prompt | self.model | StrOutputParser()
+    
 
 
 class SimpleGenerator(BaseGenerator):

@@ -24,10 +24,11 @@ documents = load_pdf_pages(file_path=file_path, start_page=1, end_page=20)
 retriever = create_vector_store_retriever(documents=documents ,embeddings_model=emb_model)
 
 # Initialize the retrieval stratege
-r = HyDERetriever(model=retrieval_llm, base_retriever=retriever)
+r = StepBackRetriever(model=retrieval_llm, base_retriever=retriever, template= None)
 
 # Initialize Genrator stratege
-g = HyDEGenerator(model=generation_llm, template=None)
+g = StepBackGenerator(model=generation_llm, template=None)
+
 
 # Pipline
 rag_pipeline = RagPipeline(retrieval=r, generator=g)

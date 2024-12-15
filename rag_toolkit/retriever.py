@@ -2,15 +2,12 @@ from abc import ABC, abstractmethod
 from langchain_core.prompts import ChatPromptTemplate, FewShotChatMessagePromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain.load import dumps, loads
-from langchain import hub
-
 
 
 class Retrieval(ABC):
     @abstractmethod
     def generate_queries(self, input_query: str) -> str:
         pass
-
 
     @abstractmethod
     def name(self) -> str:
@@ -21,12 +18,11 @@ class Retrieval(ABC):
         pass
 
 
-
-
 class BaseRetriever(Retrieval):
-    def __init__(self, model, base_retriever):
+    def __init__(self, model, base_retriever, template=None):
         self.model = model
         self.base_retriever = base_retriever
+        self.template = template
 
     def build_query_gen_chain(self):
         return (
@@ -48,27 +44,12 @@ class BaseRetriever(Retrieval):
         )
 
 
-
-
-
 class SimpleRetriever(BaseRetriever):
-
     def name(self) -> str:
         return "Simple Retrieval"
-    
-    def build_query_gen_chain(self):
-        pass
-
-    def generate_queries(self, input_query: str):
-        pass
-
-    def build_retrieval_chain(self, aggregation_fn):
-        pass
 
     def retrieve_documents(self, input_query: str):
-        
         return self.base_retriever.get_relevant_documents.invoke(input_query)
-
 
 
 class MultiQueryRetriever(BaseRetriever):
@@ -76,7 +57,7 @@ class MultiQueryRetriever(BaseRetriever):
         return "Multi-Query Generation Retrieval"
 
     def generate_retrieval_prompt(self):
-        template = (
+        template = self.template or (
             """You are an AI assistant. Generate five alternative versions of the given \
             question to enhance document retrieval. Each version should offer a different perspective \
             on the user's query. Provide the alternative questions separated by newlines. \
@@ -92,7 +73,6 @@ class MultiQueryRetriever(BaseRetriever):
         flattened_docs = [dumps(doc) for sublist in documents for doc in sublist]
         unique_docs = list(set(flattened_docs))
         return [loads(doc) for doc in unique_docs]
-    
 
 
 class FusionRetriever(BaseRetriever):
@@ -100,7 +80,7 @@ class FusionRetriever(BaseRetriever):
         return "Fusion Generation Retrieval"
 
     def generate_retrieval_prompt(self):
-        template = (
+        template = self.template or (
             """You are a helpful assistant that generates multiple search queries based on a single input query.\n\n
             Generate multiple search queries related to: {question} \n\nOutput (4 queries):"""
         )
@@ -126,13 +106,12 @@ class FusionRetriever(BaseRetriever):
         return reranked_results
 
 
-
 class DecomposeRetriever(BaseRetriever):
     def name(self) -> str:
         return "Decomposition Retrieval"
 
     def generate_retrieval_prompt(self):
-        template = (
+        template = self.template or (
             """You are a helpful assistant that generates multiple sub-questions related to an input question. \n
             The goal is to break down the input into a set of sub-problems/sub-questions that can be answered in isolation. \n
             Generate multiple search queries related to: {question} \n
@@ -141,35 +120,34 @@ class DecomposeRetriever(BaseRetriever):
         return ChatPromptTemplate.from_template(template)
 
 
-
-
 class StepBackRetriever(BaseRetriever):
     def name(self) -> str:
         return 'Step Back Retrieval'
-    
+
     def generate_retrieval_prompt(self):
         examples = [
-        {
-            "input": "Could the members of The Police perform lawful arrests?",
-            "output": "what can the members of The Police do?",
-        },
-        {
-            "input": "Jan Sindel’s was born in what country?",
-            "output": "what is Jan Sindel’s personal history?",
-        },
+            {
+                "input": "Could the members of The Police perform lawful arrests?",
+                "output": "what can the members of The Police do?",
+            },
+            {
+                "input": "Jan Sindel’s was born in what country?",
+                "output": "what is Jan Sindel’s personal history?",
+            },
         ]
 
         example_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("human", "{input}"),
-            ("ai", "{output}"),
-        ]
+            [
+                ("human", "{input}"),
+                ("ai", "{output}"),
+            ]
         )
 
         few_shot_prompt = FewShotChatMessagePromptTemplate(
             example_prompt=example_prompt,
             examples=examples,
         )
+
         return ChatPromptTemplate.from_messages(
             [
                 (
@@ -178,29 +156,28 @@ class StepBackRetriever(BaseRetriever):
                 ),
                 few_shot_prompt,
                 ("user", "{question}"),
-            ])
-    
+            ]
+        )
     def build_query_gen_chain(self):
         return (
             self.generate_retrieval_prompt()
             | self.model
             | StrOutputParser()
         )
-    
-
 
 
 class HyDERetriever(BaseRetriever):
     def name(self) -> str:
         return 'HyDE Retrieval'
-    
+
     def generate_retrieval_prompt(self):
-        template =  """Please write a scientific paper passage to answer the question
-            Question: {question}
+        template = self.template or (
+            """Please write a scientific paper passage to answer the question\n
+            Question: {question}\n
             Passage:"""
+        )
         return ChatPromptTemplate.from_template(template)
-    
-            
+
     def build_query_gen_chain(self):
         return (
             self.generate_retrieval_prompt()

@@ -186,3 +186,30 @@ class StepBackRetriever(BaseRetriever):
             | self.model
             | StrOutputParser()
         )
+    
+
+
+
+class HyDERetriever(BaseRetriever):
+    def name(self) -> str:
+        return 'HyDE Retrieval'
+    
+    def generate_retrieval_prompt(self):
+        template =  """Please write a scientific paper passage to answer the question
+            Question: {question}
+            Passage:"""
+        return ChatPromptTemplate.from_template(template)
+    
+            
+    def build_query_gen_chain(self):
+        return (
+            self.generate_retrieval_prompt()
+            | self.model
+            | StrOutputParser()
+        )
+    
+    def build_retrieval_chain(self):
+        return (
+            self.build_query_gen_chain()
+            | self.base_retriever
+        )

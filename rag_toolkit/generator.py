@@ -155,3 +155,21 @@ class StepBackGenerator(BaseGenerator):
         chain = self.build_chain(retrival_approch=retrieval_approach)
 
         return chain.invoke({"question": query})
+    
+
+
+
+class HyDEGenerator(BaseGenerator):
+    def default_template(self):
+        return  """Answer the following question based on this context:
+            {context}
+            Question: {question}
+            """
+
+    def answer(self, query, retrieval_approach):
+        chain = self.build_chain(question=itemgetter('question') 
+                                 , context = retrieval_approach.build_retrieval_chain())
+
+        return chain.invoke({"question": query})
+    
+

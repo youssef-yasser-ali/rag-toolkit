@@ -12,6 +12,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "langchain==0.3.12",
+        "langchain-community==0.3.12",
         "langsmith==0.1.140",
         "chromadb==0.5.20",
         "langchain-google-genai==2.0.4",

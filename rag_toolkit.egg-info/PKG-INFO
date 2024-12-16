@@ -1,0 +1,199 @@
+Metadata-Version: 2.1
+Name: rag-toolkit
+Version: 0.1.0
+Summary: A library for building Retrieval-Augmented Generation pipelines.
+Home-page: https://github.com/youssef-yasser-ali/rag-toolkit
+Author: Your Name
+Author-email: yyasser849@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# RAG Toolkit
+
+The **RAG Toolkit** is a library designed to streamline the creation of Retrieval-Augmented Generation (RAG) pipelines. It provides utilities for document processing, vector-based retrieval, query routing, and integration with large language models (LLMs). This toolkit simplifies the development of RAG-based systems, enabling developers to focus on solving real-world problems.
+
+---
+
+## Features
+
+- **Document Processing**: Load and preprocess documents from PDFs and other sources.
+- **Vector Store Retriever**: Create retrievers using embeddings for efficient information retrieval.
+- **Query Routing**: Smart routing based on user-defined logic or embeddings.
+- **RAG Pipelines**: Easily build and customize RAG pipelines for various use cases.
+- **Customizable Templates**: Use or define your own templates for specific tasks or domains.
+- **Integrations**: Works with popular LLMs and embedding models.
+
+---
+
+## Installation
+
+To install the RAG Toolkit, clone the repository and install it locally:
+
+```bash
+# Clone the repository
+git clone https://github.com/youssef-yasser-ali/rag-toolkit.git
+
+# Navigate to the directory
+cd rag-toolkit
+
+# Install the library
+pip install .
+```
+
+Or install directly from PyPI (if published):
+
+```bash
+pip install rag-toolkit
+```
+
+---
+
+## Quickstart Guide
+
+### 1. Import the Library
+
+```python
+from rag_toolkit.data_loader import load_pdf_pages
+from rag_toolkit.vector_store import create_vector_store_retriever
+from rag_toolkit.pipeline import RagPipeline
+from rag_toolkit.routing import QueryRouter
+from rag_toolkit.google_models import initialize_llm
+
+# Optional: Load configurations
+from config.config import get_generator_api_key, GENRATIVE_MODEL
+```
+
+### 2. Load Documents
+
+Use the `load_pdf_pages` function to load and preprocess documents:
+
+```python
+# Load documents from a PDF
+pdf_path = "./data/raw/sample.pdf"
+docs = load_pdf_pages(pdf_path, start_page=1, end_page=10)
+```
+
+### 3. Create a Retriever
+
+Generate a vector-based retriever using an embedding model:
+
+```python
+from rag_toolkit.google_models import initialize_embedding
+from config.config import get_embedding_api_key, EMBEDDING_MODEL
+
+# Initialize embedding model
+embedding_model = initialize_embedding(model_name=EMBEDDING_MODEL, api_key=get_embedding_api_key())
+
+# Create retriever
+retriever = create_vector_store_retriever(docs, embedding_model)
+```
+
+### 4. Build a Pipeline
+
+Combine the retriever and generator into a RAG pipeline:
+
+```python
+# Initialize LLM
+retrieval_llm = initialize_llm(model_name=GENRATIVE_MODEL, api_key=get_generator_api_key())
+
+# Build pipeline
+pipeline = RagPipeline(retrieval=retriever, generator=retrieval_llm)
+
+# Query the pipeline
+query = "Explain transformers in machine learning."
+response = pipeline.process(query)
+print(response)
+```
+
+### 5. Use Query Routing
+
+Route queries to specific data sources or templates:
+
+```python
+datasources = ["python_docs", "js_docs", "golang_docs"]
+router = QueryRouter(datasources=datasources, model=retrieval_llm, routing_logic="Choose the best match.")
+
+question = "Why doesn't the following JavaScript code work?"
+selected_datasource = router.route(question)
+print(f"Selected Datasource: {selected_datasource}")
+```
+
+---
+
+## Examples
+
+See the `examples/` directory for real-world usage scenarios:
+
+- **Example 1**: Build a RAG pipeline for document QA.
+- **Example 2**: Route queries to different datasources.
+- **Example 3**: Customize retriever and generator templates.
+
+Run the examples:
+
+```bash
+python examples/example_pipeline.py
+```
+
+---
+
+## Dependencies
+
+The RAG Toolkit requires the following Python libraries:
+
+- `openai`
+- `numpy`
+- `pandas`
+- `scikit-learn`
+- `PyPDF2`
+- `faiss`
+- `tqdm`
+
+Install dependencies using:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Testing
+
+Run the unit tests to verify the library:
+
+```bash
+pytest tests/
+```
+
+---
+
+## Contributing
+
+We welcome contributions! If you want to contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature.
+3. Commit your changes.
+4. Submit a pull request.
+
+---
+
+## License
+
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Contact
+
+For questions or support, please contact:
+
+- **Email**: your.email@example.com
+- **GitHub**: [YourUsername](https://github.com/yourusername)
+
+---
+
+Happy Coding!

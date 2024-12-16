@@ -11,8 +11,7 @@ setup(
     url="https://github.com/youssef-yasser-ali/rag-toolkit",
     packages=find_packages(),
     install_requires=[
-        "langchain==0.3.7",
-        "langchain-community==0.3.5",
+        "langchain==0.3.12",
         "langsmith==0.1.140",
         "chromadb==0.5.20",
         "langchain-google-genai==2.0.4",

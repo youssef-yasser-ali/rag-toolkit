@@ -1,5 +1,5 @@
 <!-- <p align ='center' > <img src="assets/rag_toolkit_logo.png" width="400" alt='rag toolkit logo'/></p> -->
-<p align ='center' > <img src="assets/logo_without_bg.png" width="400" alt='rag toolkit logo'/></p>
+<p align ='center' > <img src="assets/logo_without_bg.png" width="300" alt='rag toolkit logo'/></p>
 <br>
 
 # About RAG Toolkit

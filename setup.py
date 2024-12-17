@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="rag-toolkit",
-    version="0.1.0",
+    version="0.1.1",
     author="Your Name",
     author_email="yyasser849@gmail.com",
     description="A library for building Retrieval-Augmented Generation pipelines.",
@@ -24,5 +24,5 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.9",
 )

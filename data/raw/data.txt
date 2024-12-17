@@ -1,0 +1,3 @@
+This is the first line of the text file.
+Here is the second line.
+And this is the third line of the file.

@@ -19,22 +19,21 @@ emb_model =  initialize_embedding(model_name=EMBEDDING_MODEL, api_key=get_embedd
 file_path = './data/raw/Hands_on_ml.pdf'
 documents = load_pdf_pages(file_path=file_path, start_page=1, end_page=20)
 
+# Example usage:
 
-# base_retriever
-retriever = create_vector_store_retriever(documents=documents ,embeddings_model=emb_model)
+# Base Retriever
+retriever = create_vector_store_retriever(documents=documents, embeddings_model=emb_model)
 
-# Initialize the retrieval stratege
-r = StepBackRetriever(model=retrieval_llm, base_retriever=retriever, template= None)
+# Initialize the retrieval strategy
+retrieval_approach = DecomposeRetriever(model=retrieval_llm, base_retriever=retriever, template=None)
 
-# Initialize Genrator stratege
-g = StepBackGenerator(model=generation_llm, template=None)
+# Initialize the generator strategy
+generator_approach = IndividualGenerator(model=generation_llm, template=None)
 
-
-# Pipline
-rag_pipeline = RagPipeline(retrieval=r, generator=g)
+# Pipeline
+rag_pipeline = RagPipeline(retrieval=retrieval_approach, generator=generator_approach)
 
 # Running the pipeline
-
-query = "What's ML"
+query = "What's ML?"
 result = rag_pipeline.process(query=query)
 print(result)

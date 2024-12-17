@@ -1,0 +1,14 @@
+[
+  {
+    "page_content": "This is the first JSON document.",
+    "metadata": "1"
+  },
+  {
+    "page_content": "This is the second JSON document.",
+    "metadata": "2"
+  },
+  {
+    "page_content": "This is the third JSON document.",
+    "metadata": "3"
+  }
+]

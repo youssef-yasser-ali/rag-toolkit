@@ -4,7 +4,7 @@ The **RAG Toolkit** is a library designed to streamline the creation of Retrieva
 
 ## Features
 
-- **Data Loading**: Extract and process data from PDF files.
+- **Data Loading**: Extract and process data from PDF, JSON, TXT, and CSV files.
 - **Base Retrieval**: Efficient retrieval setup using embeddings for document search.
 - **Retrieval Strategies**: Support for various retrieval strategies, including StepBack, Fusion, and more.
 - **Generation Strategies**: Flexible response generation methods, including Recursive and HyDE.

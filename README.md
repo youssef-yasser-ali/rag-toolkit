@@ -148,8 +148,8 @@ The **examples/** directory contains sample scripts to help you get started with
 - **example_pipeline**: A basic example of a RAG pipeline for question-answering.
 - **routing_example**: Example of routing queries based on the context.
 - **customize_template**: How to use custom templates for retrieval and generation.
-
-Run these examples using:
+- **loading_example**: Demonstrates loading and processing multiple document formats (PDF, JSON, TXT, CSV).
+  Run these examples using:
 
 ```bash
 python -m examples.example_pipeline

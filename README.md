@@ -2,7 +2,7 @@
 <p align ='center' > <img src="assets/logo_without_bg.png" width="300" alt='rag toolkit logo'/></p>
 <br>
 
-# About RAG Toolkit
+## About RAG Toolkit
 
 The **RAG Toolkit** is a library designed to streamline the creation of Retrieval-Augmented Generation (RAG) pipelines. It provides utilities for document processing, vector-based retrieval, query routing, and integration with large language models (LLMs). This toolkit simplifies the development of RAG-based systems, enabling developers to focus on solving real-world problems.
 
